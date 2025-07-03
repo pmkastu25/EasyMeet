@@ -2,8 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "prod": "pm2 src/index.js"
   },
   "author": "Prathamesh. K",
   "license": "ISC",
@@ -12,6 +15,9 @@
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.0.1",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "http-status": "^2.1.0",
+    "mongoose": "^8.16.1",
+    "socket.io": "^4.8.1"
   }
 }
