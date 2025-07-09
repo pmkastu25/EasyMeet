@@ -44,7 +44,7 @@ export const AuthProvider = ({children}) => {
                 router("/home");
             }
         }catch(err) {
-            console.log(err);
+            throw err;
         }
     }
     const data = {
