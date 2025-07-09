@@ -1,2 +1,2 @@
 # EasyMeet
-A Web Application Inspired by Zoom Video Conferencing Application.
+A Web Service Inspired by Zoom Video Conferencing Application.
