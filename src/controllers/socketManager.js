@@ -15,6 +15,7 @@ export const connectToSocket = (server) => {
     }); // node http server
 
     io.on("connection", (socket) => {
+        console.log("SOMETHING CONNECTED");
         socket.on("join-call", (path) => {
             if(connections[path] === undefined){
                 connections[path] = [];
@@ -24,7 +25,7 @@ export const connectToSocket = (server) => {
 
             timeOnline[socket.id] = new Date();
 
-            for(let a = 0; a< messages[path].length; a++){
+            for(let a = 0; a < connections[path].length; a++){
                 io.to(connections[path][a]).emit("user-joined", socket.id, connections[path])
             }
 
@@ -40,7 +41,7 @@ export const connectToSocket = (server) => {
         });
 
         socket.on("chat-message", (data, sender) => {
-            const [matchingRoom, found] = Object.entries(connections).reduce(([matchingRoom, isFound], [roomKey, roomValue]) => {
+            const [matchingRoom, found] = Object.entries(connections).reduce(([room, isFound], [roomKey, roomValue]) => {
                 if(!isFound && roomValue.includes(socket.id)){
                     return [roomKey, true];
                 }
