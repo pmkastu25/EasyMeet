@@ -33,17 +33,17 @@ app.use("/api/v1/users", userRoutes);
 //     res.sendFile(join(__dirname, 'index.html'));
 // });
 
-io.on('connection', (socket) => {
-    console.log("A user is connected");
-    // socket.on('disconnect', ()=>{
-    //     console.log("User disconnected");
-    // })
+// io.on('connection', (socket) => {
+//     console.log("A user is connected");
+//     // socket.on('disconnect', ()=>{
+//     //     console.log("User disconnected");
+//     // })
 
-    // socket.on('chat message', (msg)=>{
-    //     // console.log("message: "+ msg);
-    //     io.emit('chat message', msg);
-    // })
-})
+//     // socket.on('chat message', (msg)=>{
+//     //     // console.log("message: "+ msg);
+//     //     io.emit('chat message', msg);
+//     // })
+// })
 
 const start = async()=>{
     const connectiondb = await mongoose.connect(`${process.env.MONGO_URL}`);
