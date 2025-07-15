@@ -228,7 +228,7 @@ function VideoMeetComponent() {
     //TODO: addMessage
     let addMessage = (data, sender, socketIdSender) => {
         setMessages((prev) => [
-            ...prev, {sender: socketIdSender, data: data}
+            ...prev, {sender: sender, data: data}
         ]);
 
         //New message
@@ -428,6 +428,14 @@ function VideoMeetComponent() {
         setMessage("");
     }
 
+    let handleEndCall = () => {
+        try{
+            let tracks = localVideoRef.current.srcObject.getTracks();
+            tracks.forEach((track) => track.stop());
+        } catch(e) {}
+        window.location.href = "/home";
+    }
+
     return ( 
         <div>
             {askForUsername === true ? 
@@ -457,7 +465,7 @@ function VideoMeetComponent() {
                                     <p>{item.data}</p>
                                 </div> 
                             )
-                        }) : <p>No Messages Ye</p>}
+                        }) : <p>No Messages Yet</p>}
                     </div>
                     <div className={styles.chattingArea}>
                         <TextField id="outlined-basic" label="Enter Your Chat" 
@@ -473,7 +481,7 @@ function VideoMeetComponent() {
                     <IconButton onClick={handleVideo} style={{color: 'white'}}>
                        {(video === true) ? <VideocamIcon/> : <VideocamOffIcon/>} 
                     </IconButton>
-                    <IconButton style={{color: 'red'}}>
+                    <IconButton onClick={handleEndCall} style={{color: 'red'}}>
                        <CallEndIcon />
                     </IconButton>
                     <IconButton onClick={handleAudio} style={{color: 'white'}}>
