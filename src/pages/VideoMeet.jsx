@@ -226,8 +226,15 @@ function VideoMeetComponent() {
     }
 
     //TODO: addMessage
-    let addMessage = () => {
+    let addMessage = (data, sender, socketIdSender) => {
+        setMessages((prev) => [
+            ...prev, {sender: socketIdSender, data: data}
+        ]);
 
+        //New message
+        if(socketIdSender !== socketIdRef.current){
+            setNewMessages((prevMessages) => prevMessages+1);
+        }
     }
 
     let connectToSocketServer = () => {
@@ -398,7 +405,7 @@ function VideoMeetComponent() {
     let getDisplayMedia = () => {
         if(screen) {
             if(navigator.mediaDevices.getDisplayMedia){
-                navigator.mediaDevices.getDisplayMedia(video = true, audio = true)
+                navigator.mediaDevices.getDisplayMedia({video: true, audio :true})
                 .then(getDisplayMediaSuccess)
                 .then((stream) => {})
                 .catch((e) => console.log(e));
@@ -410,10 +417,15 @@ function VideoMeetComponent() {
         if(screen !== undefined){
             getDisplayMedia();
         }
-    })
+    },[screen])
 
     let handleScreen = () => {
         setScreen(!screen);
+    }
+
+    let sendMessage = () => {
+        socketRef.current.emit("chat-message", message, username);
+        setMessage("");
     }
 
     return ( 
@@ -432,6 +444,29 @@ function VideoMeetComponent() {
                 </div>
 
             </div>: <div className={styles.meetVideoContainer}>
+            {showModal ? 
+            <div className={styles.chatRoom}>
+                <div className={styles.chatContainer}>
+                    <h1>Chat</h1>
+                    <div className={styles.chattingDisplay}>
+                {console.log(messages)}
+                        {messages.length > 0 ? messages.map((item, index) => {
+                            return (
+                                <div style={{marginBottom: "20px"}} key={index}>
+                                    <p style={{fontWeight: "bold"}}>{item.sender}</p>
+                                    <p>{item.data}</p>
+                                </div> 
+                            )
+                        }) : <p>No Messages Ye</p>}
+                    </div>
+                    <div className={styles.chattingArea}>
+                        <TextField id="outlined-basic" label="Enter Your Chat" 
+                        onChange={(e)=> setMessage(e.target.value)}
+                variant="outlined" />
+                <Button variant="contained" onClick={sendMessage}>Send</Button>
+                </div>
+                    </div>
+            </div>: <></>}
 
             <div className='buttonContainer'>
                 <div className={styles.buttonContainer}>
@@ -450,7 +485,7 @@ function VideoMeetComponent() {
                     </IconButton> : <></>} 
 
                     <Badge badgeContent={newMessages} max={999} color='secondary'>
-                        <IconButton style={{color: 'white'}}>
+                        <IconButton onClick={()=> setModal(!showModal)}style={{color: 'white'}}>
                             <ChatIcon />
                         </IconButton>
                     </Badge>
@@ -462,10 +497,8 @@ function VideoMeetComponent() {
              //TODO: videos arr is not updated here
             } 
             <div  className={styles.conferenceView}>
-            {videos.map((video) => (
-                
+            {videos.map((video) => (   
                 <div key={video.socketId}>
-                <h2>{video.socketId}</h2>
                     <video 
                      
                     data-socket={video.socketId}
