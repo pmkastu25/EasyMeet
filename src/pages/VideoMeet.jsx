@@ -13,8 +13,9 @@ import styles from "../styles/videoComponent.module.css"
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import ChatIcon from '@mui/icons-material/Chat'
+import server from '../environment';
 
-const server_url = "http://localhost:8000";
+const server_url = server;
 
 var connections  = {};
 
