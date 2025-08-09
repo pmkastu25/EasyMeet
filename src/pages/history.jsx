@@ -29,40 +29,42 @@ function History() {
     fetchHistory();
   }, []);
 
+  let formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() +1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`
+  }
+
   return (
     <div>
-      {meetings.map((e) => {
-        return (
-          <>
-          <IconButton onClick={() => {
+       <IconButton onClick={() => {
             routeTo("/home");
           }}>
             <HomeIcon />
           </IconButton>
-            <Card variant="outlined">
+          {
+             (meetings.length !== 0) ? meetings.map((e, i) => {
+        return (
+          <>
+            <Card key={i} variant="outlined">
               <CardContent>
                 <Typography
                   gutterBottom
                   sx={{ color: "text.secondary", fontSize: 14 }}
                 >
-                  Word of the Day
+                  Code: {e.meetingCode}
                 </Typography>
                 <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-                  adjective
-                </Typography>
-                <Typography variant="body2">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
+                  Date: {formatDate(e.date)}
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
             </Card>
           </>
         );
-      })}
+      }) : <></>} 
     </div>
   );
 }
